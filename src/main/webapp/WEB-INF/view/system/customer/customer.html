@@ -1,0 +1,141 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>业主管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="hidden-xs" id="HouseTableToolbar" role="group">
+                                <#button name="添加" icon="fa-plus" clickFun="TableVar.openAddHouse()"/>
+                                <#button name="修改" icon="fa-plus" clickFun="TableVar.openHouseDetail()" space="true"/>
+                                <#button name="删除" icon="fa-plus" clickFun="TableVar.delete()" space="true"/>
+                        </div>
+                        <#table id="Table"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 通知管理初始化
+     */
+    var TableVar = {
+        id: "Table",	//表格id
+        seItem: null,		//选中的条目
+        table: null,
+        layerIndex: -1
+    };
+
+    /**
+     * 初始化表格的列
+     */
+    TableVar.initColumn = function () {
+        return [
+            {field: 'selectItem', radio: true},
+            {title: 'c_id', field: 'c_id', visible: false, align: 'center', valign: 'middle'},
+            {title: '姓名', field: 'name', align: 'center', valign: 'middle', sortable: true},
+            {title: '性别', field: 'sexstr', align: 'center', valign: 'middle', sortable: true},
+            {title: '邮箱', field: 'email', align: 'center', valign: 'middle', sortable: true},
+            {title: '手机号', field: 'phone', align: 'center', valign: 'middle', sortable: true},
+            {title: '工作单位', field: 'work', align: 'center', valign: 'middle', sortable: true},
+            {title: '工作地址', field: 'work_address', align: 'center', valign: 'middle', sortable: true},
+            {title: '居住地址', field: 'live_address', align: 'center', valign: 'middle', sortable: true},
+            {title: '居住日期', field: 'live_date', align: 'center', valign: 'middle', sortable: true},
+            {title: '家庭成员', field: 'family', align: 'center', valign: 'middle', sortable: true},
+            {title: '车辆', field: 'car', align: 'center', valign: 'middle', sortable: true},
+            {title: '宠物', field: 'animal', align: 'center', valign: 'middle', sortable: true},
+            {title: '备注', field: 'remark', align: 'center', valign: 'middle', sortable: true}
+        ];
+    };
+
+    /**
+     * 检查是否选中
+     */
+    TableVar.check = function () {
+        var selected = $('#' + this.id).bootstrapTable('getSelections');
+        if (selected.length == 0) {
+            Feng.content("请先选中表格中的某一记录！");
+            return false;
+        } else {
+            TableVar.seItem = selected[0];
+            return true;
+        }
+    };
+
+    /**
+     * 点击添加通知
+     */
+    TableVar.openAddHouse = function () {
+        var index = layer.open({
+            type: 2,
+            title: '添加通知',
+            area: ['800px', '420px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/customer/add'
+        });
+        this.layerIndex = index;
+    };
+
+    /**
+     * 打开查看通知详情
+     */
+    TableVar.openHouseDetail = function () {
+        if (this.check()) {
+            var index = layer.open({
+                type: 2,
+                title: '通知详情',
+                area: ['800px', '620px'], //宽高
+                fix: false, //不固定
+                maxmin: true,
+                content: Feng.ctxPath + '/customer/update/' + TableVar.seItem.c_id
+            });
+            this.layerIndex = index;
+        }
+    };
+
+    /**
+     * 删除通知
+     */
+    TableVar.delete = function () {
+        if (this.check()) {
+
+            var operation = function(){
+                var ajax = new $ax(Feng.ctxPath + "/customer/delete", function (data) {
+                    Feng.success("删除成功!");
+                    TableVar.table.refresh();
+                }, function (data) {
+                    Feng.error("删除失败!" + data.responseJSON.message + "!");
+                });
+                ajax.set("houseId", TableVar.seItem.c_id);
+                ajax.start();
+            };
+
+            Feng.confirm("是否删除 " + TableVar.seItem.name + "?", operation);
+        }
+    };
+
+    /**
+     * 查询通知列表
+     */
+    TableVar.search = function () {
+        var queryData = {};
+        queryData['condition'] = $("#condition").val();
+        // alert($("#condition").val());
+        TableVar.table.refresh({query: queryData});
+    };
+
+    $(function () {
+        var defaultColunms = TableVar.initColumn();
+        var table = new BSTable(TableVar.id, "/customer/list", defaultColunms);
+        table.setPaginationType("client");
+        TableVar.table = table.init();
+    });
+
+</script>
+@}

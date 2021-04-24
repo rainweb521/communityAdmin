@@ -1,0 +1,51 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>物业费用收取情况汇总</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <#table id="Table"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /**
+     * 通知管理初始化
+     */
+    var TableVar = {
+        id: "Table",	//表格id
+        seItem: null,		//选中的条目
+        table: null,
+        layerIndex: -1
+    };
+
+    /**
+     * 初始化表格的列
+     */
+    TableVar.initColumn = function () {
+        return [
+            {field: 'selectItem', radio: true},
+            {title: '已收总额', field: 'allmoney', align: 'center', valign: 'middle', sortable: true},
+            {title: '已缴纳户数', field: 'behouse', align: 'center', valign: 'middle', sortable: true},
+            {title: '未缴纳户数', field: 'owehouse', align: 'center', valign: 'middle', sortable: true}
+        ];
+    };
+
+
+
+    $(function () {
+        var defaultColunms = TableVar.initColumn();
+        var table = new BSTable(TableVar.id, "/rent/alllist", defaultColunms);
+        table.setPaginationType("client");
+        TableVar.table = table.init();
+    });
+
+</script>
+@}

@@ -1,0 +1,82 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="documentInfoForm">
+
+            <input type="hidden" id="d_id" name="d_id" value="${document.id}">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">客户名称</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="customer" name="customer" type="text" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">地址</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="address" name="address" type="text" required="required">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">开始日期</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="create_date" name="create_date" type="date" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">结束日期</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="end_date" name="end_date" type="date" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">路程距离</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="date_length" name="date_length" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">总金额</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="price" name="price" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="content" name="提交" id="ensure" icon="fa-check" clickFun="InvoiceInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="InvoiceInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/invoice/invoice_info.js"></script>
+@}
